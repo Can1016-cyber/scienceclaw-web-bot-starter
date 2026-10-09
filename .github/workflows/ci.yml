@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install Web Bot dependencies
+        run: npm ci
+      - name: Build Web Bot
+        run: npm run build
+      - name: Check repository safety
+        run: npm run check:repo
+      - name: Install MCP example dependencies
+        working-directory: examples/mcp-knowledge-server
+        run: npm ci
+      - name: Test MCP example
+        working-directory: examples/mcp-knowledge-server
+        run: npm test
+      - name: Test Bot API proxy
+        working-directory: examples/bot-api-proxy
+        run: npm test

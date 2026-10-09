@@ -1,0 +1,32 @@
+name: Release source kit
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run check:repo
+      - name: Package tracked source
+        run: |
+          git archive --format=zip --prefix=scienceclaw-web-bot-starter/ --output=scienceclaw-web-bot-starter-${GITHUB_REF_NAME}.zip HEAD
+          sha256sum scienceclaw-web-bot-starter-${GITHUB_REF_NAME}.zip > scienceclaw-web-bot-starter-${GITHUB_REF_NAME}.zip.sha256
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" scienceclaw-web-bot-starter-${GITHUB_REF_NAME}.zip scienceclaw-web-bot-starter-${GITHUB_REF_NAME}.zip.sha256 --verify-tag --generate-notes

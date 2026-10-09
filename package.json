@@ -1,0 +1,33 @@
+{
+  "name": "scienceclaw-web-bot-starter",
+  "version": "0.1.0",
+  "description": "Self-hosted Web Bot starter for teams running OpenClaw and MCP knowledge servers.",
+  "private": true,
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Can1016-cyber/scienceclaw-web-bot-starter.git"
+  },
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 4301",
+    "build": "tsc -b && vite build",
+    "preflight": "node scripts/preflight.mjs",
+    "check:repo": "node scripts/check-repository.mjs",
+    "verify:stack": "node scripts/verify.mjs"
+  },
+  "dependencies": {
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "6.0.2",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "typescript": "5.9.3",
+    "vite": "8.3.4"
+  }
+}
